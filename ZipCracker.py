@@ -84,7 +84,7 @@ def update_status(message):
 
 def log_attempt(attempt):
     log_text.insert(tk.END, attempt + "\n")
-    log_text.see(tk.END)  # Scroll automatisch naar de laatste regel
+    log_text.see(tk.END)  # Scroll automatisch naar de laatste regel!
 
 
 def create_gui():
