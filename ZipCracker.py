@@ -102,7 +102,7 @@ def create_gui():
     root.drop_target_register(DND_FILES)
     root.dnd_bind('<<Drop>>', on_drop)
 
-    # Statuslabel
+    # Status label
     status_label = ttk.Label(root, text="Idle", relief="groove")
     status_label.pack(pady=5, fill="x")
 
