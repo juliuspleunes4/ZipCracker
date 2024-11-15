@@ -5,6 +5,25 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 from tkinterdnd2 import DND_FILES, TkinterDnD
 from pathlib import Path
+import json
+from datetime import datetime
+
+def update_history(wordlist_name):
+    history_file = "history.json"
+    history = {}
+
+    # Lees de huidige geschiedenis als het bestand al bestaat
+    if os.path.exists(history_file):
+        with open(history_file, "r") as file:
+            history = json.load(file)
+
+    # Voeg of update de timestamp voor de huidige woordlijst
+    if wordlist_name not in history:
+        history[wordlist_name] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Schrijf de bijgewerkte geschiedenis terug naar het bestand
+    with open(history_file, "w") as file:
+        json.dump(history, file, indent=4)
 
 def crack_archive(archive_path, wordlist_dir, seven_zip_path, update_status, log_attempt, callback):
     wordlist_files = list(Path(wordlist_dir).glob("*.txt"))
@@ -14,6 +33,7 @@ def crack_archive(archive_path, wordlist_dir, seven_zip_path, update_status, log
 
     for wordlist in wordlist_files:
         update_status(f"Trying wordlist: {wordlist.name}")
+        update_history(wordlist.name)  # Update de geschiedenis voor deze woordlijst
         with open(wordlist, 'r') as file:
             for line in file:
                 password = line.strip()
@@ -119,7 +139,7 @@ def create_gui():
     log_text.config(yscrollcommand=scrollbar.set)
 
     # Start-knop
-    crack_button = ttk.Button(root, text="Start Cracking", command=lambda: start_cracking_thread(archive_path.get()))
+    crack_button = ttk.Button(root, text="Start Bruteforce", command=lambda: start_cracking_thread(archive_path.get()))
     crack_button.pack(pady=(0, 10))  # Voeg extra padding onderaan toe om de knop iets omhoog te verplaatsen
 
     # Variabel voor archiefpad
